@@ -90,7 +90,7 @@ public class DetailActivity extends AppCompatActivity {
                         }
                         mChartView.repaint();
 
-                        /* TODO Add a fragment to show data */
+                        /* TODO Add an intent */
                         Toast.makeText(
                                 DetailActivity.this,
                                 "Chart data point index " + seriesSelection.getPointIndex() + " selected"
