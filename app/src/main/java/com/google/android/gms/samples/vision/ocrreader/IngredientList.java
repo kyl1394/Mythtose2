@@ -54,6 +54,34 @@ public class IngredientList extends AppCompatActivity {
         ingredientDatabase.add("enzymes");
         ingredientDatabase.add("cheese cultures");
 
+        ingredientDatabase.add("chicken broth");
+        ingredientDatabase.add("cooked chicken meat");
+        ingredientDatabase.add("carrots");
+        ingredientDatabase.add("semolina wheat");
+        ingredientDatabase.add("wheat flour");
+        ingredientDatabase.add("egg whites");
+        ingredientDatabase.add("celery");
+        ingredientDatabase.add("modified food starch");
+        ingredientDatabase.add("water");
+        ingredientDatabase.add("corn protein");
+        ingredientDatabase.add("chicken fat");
+        ingredientDatabase.add("salt");
+        ingredientDatabase.add("carrot puree");
+        ingredientDatabase.add("potassium chloride");
+        ingredientDatabase.add("onion powder");
+        ingredientDatabase.add("sugar");
+        ingredientDatabase.add("soy protein isolate");
+        ingredientDatabase.add("tomato extract");
+        ingredientDatabase.add("sodium phosphate");
+        ingredientDatabase.add("garlic powder");
+        ingredientDatabase.add("parsley");
+        ingredientDatabase.add("citric acid");
+        ingredientDatabase.add("natural flavor");
+        ingredientDatabase.add("spice");
+        ingredientDatabase.add("chives");
+        ingredientDatabase.add("beta carotene");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_list);
         HashMap<String, Double> potentialIngredients = new HashMap<>();
@@ -73,17 +101,36 @@ public class IngredientList extends AppCompatActivity {
                 for (int candidateIngredientIndex = 0; candidateIngredientIndex < candidate.length; candidateIngredientIndex++) {
                     double maxSimilarity = -1;
                     String mostSimilarWord = "";
+                    int numWordsAdded = 0;
                     for (int wordIndex = 0; wordIndex < ingredientDatabase.size(); wordIndex++) {
                         double temp = similarity(candidate[candidateIngredientIndex], ingredientDatabase.get(wordIndex));
+                        double addNextWord = 0;
+                        numWordsAdded = 0;
+
+                        for (int i = candidateIngredientIndex; i < candidate.length; i++) {
+                            String multiWordIngredient = candidate[candidateIngredientIndex];
+                            multiWordIngredient += " " + candidate[i];
+
+                            addNextWord = similarity(multiWordIngredient, ingredientDatabase.get((wordIndex)));
+                            if (addNextWord > temp) {
+                                temp = addNextWord;
+                                numWordsAdded++;
+                            } else if (addNextWord < temp) {
+                                break;
+                            }
+                        }
+
                         if (temp > maxSimilarity) {
                             maxSimilarity = temp;
                             mostSimilarWord = ingredientDatabase.get(wordIndex);
                         }
                     }
 
-                    if ((!potentialIngredients.containsKey(mostSimilarWord) || potentialIngredients.get(mostSimilarWord) < maxSimilarity) && maxSimilarity > 0.3) {
+                    if ((!potentialIngredients.containsKey(mostSimilarWord) || potentialIngredients.get(mostSimilarWord) < maxSimilarity) && maxSimilarity > 0.45) {
                         potentialIngredients.put(mostSimilarWord, maxSimilarity);
                     }
+
+                    candidateIngredientIndex += numWordsAdded;
                 }
             }
 
