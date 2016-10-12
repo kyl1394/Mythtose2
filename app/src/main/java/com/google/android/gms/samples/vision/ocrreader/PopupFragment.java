@@ -19,7 +19,8 @@ public class PopupFragment extends Fragment {
 
     @Override
     public void onAttach(Activity parent) {
-       mParent = parent;
+        super.onAttach(parent);
+        mParent = parent;
     }
 
     @Override
@@ -27,19 +28,19 @@ public class PopupFragment extends Fragment {
 
         Bundle linksToShow = getArguments();
 
-        ListView listView = (ListView) mParent.findViewById (R.id.linksList);
-        String[] values = null;
+        //ListView listView = (ListView) mParent.findViewById (R.id.linksList);
+        //String[] values = null;
 
-        ArrayAdapter<String>  adapter = new ArrayAdapter<String>(mParent, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        //ArrayAdapter<String>  adapter = new ArrayAdapter<String>(mParent, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
-        listView.setAdapter(adapter);
+        //listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /* TODO make links open a browser */
-            }
-        });
+        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //    @Override
+        //    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //        /* TODO make links open a browser */
+        //    }
+        //});
 
         return inflator.inflate(R.layout.popup_fragment, container, false);
     }
