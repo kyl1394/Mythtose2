@@ -1,9 +1,14 @@
 package com.google.android.gms.samples.vision.ocrreader;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,26 +49,33 @@ public class DetailActivity extends AppCompatActivity {
     private EditText mValue;
     /** The chart view that displays the data. */
     private GraphicalView mChartView;
+    /** */
+    private ArrayList<ChartData> chartInfo;
 
     @Override
     protected void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
-        mSeries = (CategorySeries) savedState.getSerializable("current_series");
-        mRenderer = (DefaultRenderer) savedState.getSerializable("current_renderer");
+        //mSeries = (CategorySeries) savedState.getSerializable("current_series");
+        //mRenderer = (DefaultRenderer) savedState.getSerializable("current_renderer");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("current_series", mSeries);
-        outState.putSerializable("current_renderer", mRenderer);
+        //outState.putSerializable("current_series", mSeries);
+        //outState.putSerializable("current_renderer", mRenderer);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        float val = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, metrics);
+        mRenderer.setLabelsTextSize(val);
         mRenderer.setZoomButtonsVisible(true);
+        mRenderer.setShowLegend(false);
         mRenderer.setStartAngle(180);
         mRenderer.setDisplayValues(true);
 
@@ -80,11 +92,20 @@ public class DetailActivity extends AppCompatActivity {
                 SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
                 renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
                 mRenderer.addSeriesRenderer(renderer);
-                updateChart();
             }
+
+            updateChart();
         }
 
-
+        if(chartInfo == null) {
+            chartInfo = new ArrayList<>();
+            for (int x = 0; x < 10; x++) {
+                ArrayList<String> links = new ArrayList<String>();
+                links.add("<a href=\"google.com\">Click Google! " + x + "</a>");
+                links.add("<a href=\"facebook.com\">Click Facebook! +" + x + "</a>");
+                chartInfo.add(new ChartData("Element " + (char) ('A' + x), x, links));
+            }
+        }
     }
 
     private HashMap<String,Integer> getNumCategories(Set<Ingredient> ingreds) {
@@ -130,11 +151,26 @@ public class DetailActivity extends AppCompatActivity {
                         }
                         mChartView.repaint();
 
-                        /* TODO Add a fragment to show data */
+                        /* TODO Add an intent */
                         Toast.makeText(
                                 DetailActivity.this,
                                 "Chart data point index " + seriesSelection.getPointIndex() + " selected"
                                         + " point value=" + seriesSelection.getValue(), Toast.LENGTH_SHORT).show();
+
+                        //Remvove old Fragment
+                        Fragment frag = getFragmentManager().findFragmentByTag("main fragment");
+                        //NULL POINTER EXCEPTION ON FRAG
+                        getFragmentManager().beginTransaction().remove(frag).commit();
+
+
+                        //Attach new Fragment
+
+                        Bundle infoBundle = new Bundle();
+                        frag = new PopupFragment();
+                        infoBundle.putStringArrayList("array", chartInfo.get(seriesSelection.getPointIndex()).links);
+                        frag.setArguments(infoBundle);
+                        getFragmentManager().beginTransaction().replace(R.id.mainActivityFragment, frag, "main fragment").commit();
+
                     }
                 }
             });
@@ -142,6 +178,33 @@ public class DetailActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams.FILL_PARENT));
         } else {
             mChartView.repaint();
+        }
+
+//        for(ChartData cd: chartInfo) {
+//            mSeries.add(cd.name, cd.amount);
+//            SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+//            renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
+//            mRenderer.addSeriesRenderer(renderer);
+//
+//            mChartView.repaint();
+//        }
+    }
+
+    protected class ChartData {
+        public String name;
+
+        public int amount;
+
+        public ArrayList<String> links;
+
+        public ChartData() {
+            this("", 0, new ArrayList<String>());
+        }
+
+        public ChartData(String chartName, int chartAmount, ArrayList<String> chartLinks) {
+            name = chartName;
+            amount = chartAmount;
+            links = chartLinks;
         }
     }
 
