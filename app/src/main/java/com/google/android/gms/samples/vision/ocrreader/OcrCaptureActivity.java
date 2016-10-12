@@ -343,10 +343,6 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showIngredientList() {
-        setContentView(R.layout.activity_ingredient_list);
-    }
-
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override

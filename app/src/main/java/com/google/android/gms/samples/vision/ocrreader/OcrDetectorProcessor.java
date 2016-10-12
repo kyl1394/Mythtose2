@@ -73,7 +73,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             candidates.add(lowercaseValue);
             if (candidates.size() == 5) {
                 String text = "asdf";
-                Intent data = new Intent(context, IngredientList.class);
+                Intent data = new Intent(context, DetailActivity.class);
                 data.putExtra(TextBlockObject, text);
                 data.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(data);
