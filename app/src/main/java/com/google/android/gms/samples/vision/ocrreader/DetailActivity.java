@@ -1,7 +1,10 @@
 package com.google.android.gms.samples.vision.ocrreader;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -43,15 +46,15 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
-        mSeries = (CategorySeries) savedState.getSerializable("current_series");
-        mRenderer = (DefaultRenderer) savedState.getSerializable("current_renderer");
+        //mSeries = (CategorySeries) savedState.getSerializable("current_series");
+        //mRenderer = (DefaultRenderer) savedState.getSerializable("current_renderer");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("current_series", mSeries);
-        outState.putSerializable("current_renderer", mRenderer);
+        //outState.putSerializable("current_series", mSeries);
+        //outState.putSerializable("current_renderer", mRenderer);
     }
 
     @Override
@@ -73,15 +76,16 @@ public class DetailActivity extends AppCompatActivity {
 
         }
 
-        chartInfo = new ArrayList<>();
+        if(chartInfo == null) {
+            chartInfo = new ArrayList<>();
 
-        for(int x=0; x < 10; x++) {
-            ArrayList<String> links = new ArrayList<String>();
-            links.add("<a href=\"google.com\">Click Google! "+x+"</a>");
-            links.add("<a href=\"facebook.com\">Click Facebook! +"+x+"</a>");
-            chartInfo.add(new ChartData("Element " + (char)('A' + x), x, links));
+            for (int x = 0; x < 10; x++) {
+                ArrayList<String> links = new ArrayList<String>();
+                links.add("<a href=\"google.com\">Click Google! " + x + "</a>");
+                links.add("<a href=\"facebook.com\">Click Facebook! +" + x + "</a>");
+                chartInfo.add(new ChartData("Element " + (char) ('A' + x), x, links));
+            }
         }
-
     }
 
     @Override
@@ -109,6 +113,21 @@ public class DetailActivity extends AppCompatActivity {
                                 DetailActivity.this,
                                 "Chart data point index " + seriesSelection.getPointIndex() + " selected"
                                         + " point value=" + seriesSelection.getValue(), Toast.LENGTH_SHORT).show();
+
+                        //Remvove old Fragment
+                        Fragment frag = getFragmentManager().findFragmentByTag("main fragment");
+                        //NULL POINTER EXCEPTION ON FRAG
+                        getFragmentManager().beginTransaction().remove(frag).commit();
+
+
+                        //Attach new Fragment
+
+                        Bundle infoBundle = new Bundle();
+                        frag = new PopupFragment();
+                        infoBundle.putStringArrayList("array", chartInfo.get(seriesSelection.getPointIndex()).links);
+                        frag.setArguments(infoBundle);
+                        getFragmentManager().beginTransaction().replace(R.id.mainActivityFragment, frag, "main fragment").commit();
+
                     }
                 }
             });
@@ -133,13 +152,13 @@ public class DetailActivity extends AppCompatActivity {
 
         public int amount;
 
-        public List<String> links;
+        public ArrayList<String> links;
 
         public ChartData() {
             this("", 0, new ArrayList<String>());
         }
 
-        public ChartData(String chartName, int chartAmount, List<String> chartLinks) {
+        public ChartData(String chartName, int chartAmount, ArrayList<String> chartLinks) {
             name = chartName;
             amount = chartAmount;
             links = chartLinks;
