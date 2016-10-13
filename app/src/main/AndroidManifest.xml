@@ -33,8 +33,7 @@
             android:label="Read Text" />
         <activity
             android:name=".DetailActivity"
-            android:label="@string/title_activity_main">
-        </activity>
+            android:label="@string/title_activity_main"></activity>
     </application>
 
 </manifest>
