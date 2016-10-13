@@ -84,40 +84,16 @@ public class DetailActivity extends AppCompatActivity  {
             while (iter.hasNext()) {
                 String categoryName = iter.next();
                 ArrayList<String> ingredients = new ArrayList<>();
-                for (int i = 0; i < MainActivity.ingredientDatabase.size(); i++) {
-                    if (MainActivity.ingredientDatabase.get(i).type.equals(categoryName)) {
-                        ingredients.add(MainActivity.ingredientDatabase.get(i).name);
+                Iterator<Ingredient> iterator = OcrDetectorProcessor.matchedIngreds.iterator();
+                while (iterator.hasNext()) {
+                    Ingredient ingred = iterator.next();
+                    if (ingred.type.equals(categoryName)) {
+                        ingredients.add(ingred.name);
                     }
                 }
                 chartInfo.add(new ChartData(categoryName, categories.get(categoryName), ingredients));
             }
 
-            onStart = true;
-        }
-
-        if(chartInfo == null) {
-            chartInfo = new ArrayList<>();
-
-            for (int x = 0; x < 10; x++) {
-                ArrayList<String> links = new ArrayList<>();
-                links.add("Click Google! " + x);
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-                links.add("Click Facebook! " + x );
-
-
-                chartInfo.add(new ChartData("Element " + (char) ('A' + x), x, links));
-            }
             onStart = true;
         }
     }

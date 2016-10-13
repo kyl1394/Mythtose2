@@ -43,6 +43,8 @@ import static com.google.android.gms.samples.vision.ocrreader.OcrCaptureActivity
  */
 public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
+    public static Set<Ingredient> matchedIngreds;
+
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
     private Context context;
 
@@ -83,8 +85,8 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             if (candidates.size() == 5) {
                 String text = "asdf";
                 Intent data = new Intent(context, DetailActivity.class);
-                Set<Ingredient> ingreds = matchIngredientsToDatabase();
-                categories = getNumCategories(ingreds);
+                matchedIngreds = matchIngredientsToDatabase();
+                categories = getNumCategories(matchedIngreds);
                 data.putExtra("categories", categories);
                 data.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(data);
@@ -140,6 +142,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                     double maxSimilarity = -1;
                     Ingredient mostSimilar = null;
                     int numWordsAdded = 0;
+                    
                     for (int wordIndex = 0; wordIndex < ingredientDatabase.size(); wordIndex++) {
                         double temp = similarity(candidate[candidateIngredientIndex], ingredientDatabase.get(wordIndex).name);
                         double addNextWord = 0;
@@ -164,7 +167,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                         }
                     }
 
-                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.45) {
+                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.) {
                         potentialIngredients.put(mostSimilar, maxSimilarity);
                     }
 
