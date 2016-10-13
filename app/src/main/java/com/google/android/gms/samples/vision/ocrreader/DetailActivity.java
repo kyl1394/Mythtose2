@@ -133,21 +133,19 @@ public class DetailActivity extends AppCompatActivity  {
             });
             layout.addView(mChartView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
+            if (mRenderer.getSeriesRendererCount() == 0) {
+                Log.d("DetailActivity", "Reloaded Data");
+                for (ChartData cd : chartInfo) {
+                    mSeries.add(cd.name, cd.amount);
+                    SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+                    renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
+                    mRenderer.addSeriesRenderer(renderer);
+
+                    mChartView.repaint();
+                }
+            }
         } else {
             mChartView.repaint();
-        }
-
-        if(onStart) {
-            Log.d("DetailActivity", "Reloaded Data");
-            for (ChartData cd : chartInfo) {
-                mSeries.add(cd.name, cd.amount);
-                SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
-                renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
-                mRenderer.addSeriesRenderer(renderer);
-
-                mChartView.repaint();
-            }
-            onStart = false;
         }
     }
 }
