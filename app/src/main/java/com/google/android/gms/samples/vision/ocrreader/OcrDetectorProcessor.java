@@ -19,6 +19,7 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.util.SparseArray;
 
 import com.google.android.gms.samples.vision.ocrreader.ui.camera.GraphicOverlay;
@@ -63,17 +64,24 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
      * previous frames, or reduce noise by eliminating TextBlocks that have not persisted through
      * multiple detections.
      */
+    private int candidateSize = -1;
     @Override
     public void receiveDetections(Detector.Detections<TextBlock> detections) {
-        mGraphicOverlay.clear();
+        //mGraphicOverlay.clear();
+        if (candidates.size() > candidateSize) {
+            candidateSize = candidates.size();
+            Snackbar.make(mGraphicOverlay, "Found " + candidates.size() + "/15",
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        }
         SparseArray<TextBlock> items = detections.getDetectedItems();
         boolean shouldAdd = false;
         String lowercaseValue = "";
         for (int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
             lowercaseValue += item.getValue().toLowerCase() + ",";
-            OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
-            mGraphicOverlay.add(graphic);
+            //OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
+            //mGraphicOverlay.add(graphic);
         }
 
         if (lowercaseValue.contains("ingredients")) {
@@ -121,7 +129,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         return toReturn;
     }
 
-    private String[] blacklist = {"with", "contains", "of", "henz", "heinz", "hunz", "the", "less", "than", "craft", "kraft", "company", "2%", "an", "and", "for", "added", "color"};
+    private String[] blacklist = {"with", "contains", "of", "henz", "heinz", "hunz", "the", "less", "than", "kraft", "company", "2%", "an", "and", "for", "added"};
     private Set<Ingredient> matchIngredientsToDatabase() {
         ArrayList<Ingredient> ingredientDatabase = MainActivity.ingredientDatabase;
 
@@ -175,7 +183,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                         }
                     }
 
-                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.50) {
+                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.55) {
                         potentialIngredients.put(mostSimilar, maxSimilarity);
                     }
 
