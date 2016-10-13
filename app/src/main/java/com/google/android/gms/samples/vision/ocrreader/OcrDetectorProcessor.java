@@ -82,7 +82,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
         if (shouldAdd) {
             candidates.add(lowercaseValue);
-            if (candidates.size() == 5) {
+            if (candidates.size() == 10) {
                 String text = "asdf";
                 Intent data = new Intent(context, DetailActivity.class);
                 matchedIngreds = matchIngredientsToDatabase();
@@ -121,6 +121,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         return toReturn;
     }
 
+    private String[] blacklist = {"with", "contains", "of", "the", "less", "than", "chicago", "craft", "kraft", "company", "2%", "an", "and", "for", "added", "color", "wi", "wath"};
     private Set<Ingredient> matchIngredientsToDatabase() {
         ArrayList<Ingredient> ingredientDatabase = MainActivity.ingredientDatabase;
 
@@ -138,11 +139,18 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             for (int candidateIndex = 0; candidateIndex < candidates.size(); candidateIndex++) {
                 String[] candidate = candidates.get(candidateIndex).split(" ");
 
+                loop:
                 for (int candidateIngredientIndex = 0; candidateIngredientIndex < candidate.length; candidateIngredientIndex++) {
+                    for (int i = 0; i < blacklist.length; i++) {
+                        if (similarity(candidate[candidateIngredientIndex], blacklist[i]) > 0.6) {
+                            continue loop;
+                        }
+                    }
+
                     double maxSimilarity = -1;
                     Ingredient mostSimilar = null;
                     int numWordsAdded = 0;
-                    
+
                     for (int wordIndex = 0; wordIndex < ingredientDatabase.size(); wordIndex++) {
                         double temp = similarity(candidate[candidateIngredientIndex], ingredientDatabase.get(wordIndex).name);
                         double addNextWord = 0;
@@ -167,7 +175,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                         }
                     }
 
-                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.) {
+                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.58) {
                         potentialIngredients.put(mostSimilar, maxSimilarity);
                     }
 
