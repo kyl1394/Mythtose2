@@ -138,6 +138,7 @@ public class DetailActivity extends AppCompatActivity  {
         } else {
             mChartView.repaint();
         }
+
     }
 
     @Override

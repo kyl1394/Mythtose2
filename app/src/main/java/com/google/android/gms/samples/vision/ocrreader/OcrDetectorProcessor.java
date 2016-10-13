@@ -82,7 +82,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
         if (shouldAdd) {
             candidates.add(lowercaseValue);
-            if (candidates.size() == 10) {
+            if (candidates.size() == 15) {
                 String text = "asdf";
                 Intent data = new Intent(context, DetailActivity.class);
                 matchedIngreds = matchIngredientsToDatabase();
@@ -121,7 +121,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         return toReturn;
     }
 
-    private String[] blacklist = {"with", "contains", "of", "the", "less", "than", "chicago", "craft", "kraft", "company", "2%", "an", "and", "for", "added", "color", "wi", "wath"};
+    private String[] blacklist = {"with", "contains", "of", "henz", "heinz", "hunz", "the", "less", "than", "craft", "kraft", "company", "2%", "an", "and", "for", "added", "color"};
     private Set<Ingredient> matchIngredientsToDatabase() {
         ArrayList<Ingredient> ingredientDatabase = MainActivity.ingredientDatabase;
 
@@ -142,7 +142,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                 loop:
                 for (int candidateIngredientIndex = 0; candidateIngredientIndex < candidate.length; candidateIngredientIndex++) {
                     for (int i = 0; i < blacklist.length; i++) {
-                        if (similarity(candidate[candidateIngredientIndex], blacklist[i]) > 0.6) {
+                        if (similarity(candidate[candidateIngredientIndex], blacklist[i]) > 0.75) {
                             continue loop;
                         }
                     }
@@ -175,7 +175,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                         }
                     }
 
-                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.58) {
+                    if ((!potentialIngredients.containsKey(mostSimilar) || potentialIngredients.get(mostSimilar) < maxSimilarity) && maxSimilarity > 0.50) {
                         potentialIngredients.put(mostSimilar, maxSimilarity);
                     }
 
