@@ -37,8 +37,6 @@ public class DetailActivity extends AppCompatActivity  {
     private GraphicalView mChartView;
     /** The info that the chart shows. */
     private ArrayList<ChartData> chartInfo;
-    /** Allows information to be added when this activity is first created */
-    private boolean onStart = false;
 
     @Override
     protected void onRestoreInstanceState(Bundle savedState) {
@@ -71,10 +69,6 @@ public class DetailActivity extends AppCompatActivity  {
 
         Bundle extras = getIntent().getExtras();
 
-        /**************************
-         TODO: fill the array list with real data instead of this junk
-
-         */
 
         if(extras != null) {
             chartInfo = new ArrayList<>();
@@ -93,8 +87,6 @@ public class DetailActivity extends AppCompatActivity  {
                 }
                 chartInfo.add(new ChartData(categoryName, categories.get(categoryName), ingredients));
             }
-
-            onStart = true;
         }
     }
 
@@ -133,22 +125,27 @@ public class DetailActivity extends AppCompatActivity  {
             });
             layout.addView(mChartView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
+            if(mRenderer.getSeriesRendererCount() == 0) {
+                Log.d("DetailActivity", "Reloaded Data");
+                for (ChartData cd : chartInfo) {
+                    mSeries.add(cd.name, cd.amount);
+                    SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+                    renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
+                    mRenderer.addSeriesRenderer(renderer);
+                }
+                mChartView.repaint();
+            }
         } else {
             mChartView.repaint();
         }
+    }
 
-        if(onStart) {
-            Log.d("DetailActivity", "Reloaded Data");
-            for (ChartData cd : chartInfo) {
-                mSeries.add(cd.name, cd.amount);
-                SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
-                renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
-                mRenderer.addSeriesRenderer(renderer);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-                mChartView.repaint();
-            }
-            onStart = false;
-        }
+        mRenderer = new DefaultRenderer();
+        mChartView = null;
     }
 }
 

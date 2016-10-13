@@ -40,6 +40,7 @@ public class LinksAdapter extends ArrayAdapter<String> {
             row = inflater.inflate(layoutID, parent, false);
 
             tv = (TextView) row.findViewById(android.R.id.text1);
+            tv.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
             row.setTag(tv);
         } else {

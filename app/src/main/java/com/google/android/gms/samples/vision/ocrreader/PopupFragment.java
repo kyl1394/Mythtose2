@@ -2,13 +2,19 @@ package com.google.android.gms.samples.vision.ocrreader;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -51,6 +57,30 @@ public class PopupFragment extends Fragment {
             Log.e("PopupFragment", "Links ArrayList was empty.");
             links = new ArrayList<>();
         }
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final String listItemName = links.get(position);
+
+                new Handler().postDelayed(new Runnable()  {
+                    @Override
+                    public void run() {
+
+                        try {
+                            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://en.wikipedia.com/w/index.php?search=" + listItemName));
+                            startActivity(myIntent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(mParent, "No application can handle this request."
+                                    + " Please install a web browser",  Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+                    }
+                }, 1000);
+            }
+        });
+        list.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+
         adapter = new LinksAdapter(mParent, android.R.layout.simple_list_item_1, links);
         list.setAdapter(adapter);
     }
