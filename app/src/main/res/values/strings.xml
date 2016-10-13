@@ -4,7 +4,7 @@
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
-    <string name="title_activity_main">Ocr Detector Sample</string>
+    <string name="title_activity_main">Mythtose</string>
     <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
     <string name="read_text">Detect Text</string>
     <string name="auto_focus">Auto Focus</string>
@@ -44,7 +44,7 @@
         "All action takes place in a single environment. Objects are presented to the user without "
         "breaking the continuity of experience even as they transform and reorganize.\n"
         "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+        "Feedback is subtle yet clear. Transitions are efï¬cient yet coherent.\n\n"
 
         "3D world.\n\n"
 
@@ -83,7 +83,7 @@
         "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
         "changes are consistently implemented using dynamic elevation offsets.\n"
         "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
+        "to the componentâ€™s resting state. They ensure that elevation changes are consistent "
         "across actions and component types. For example, all components that lift on press have "
         "the same elevation change relative to their resting elevation.\n"
         "Once the input event is completed or cancelled, the component will return to its resting "
@@ -99,7 +99,10 @@
         "For example, a floating action button (FAB) can disappear or move off screen before a "
         "user picks up a card, or it can move if a snackbar appears.\n"
         "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
+        "For example, position the FAB to one side of stream of a cards so the FAB wonâ€™t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="add_values">Your Food is</string>
+    <string name="new_series">New Series</string>
+    <string name="popupTitleText">Parts of this Group</string>
 </resources>

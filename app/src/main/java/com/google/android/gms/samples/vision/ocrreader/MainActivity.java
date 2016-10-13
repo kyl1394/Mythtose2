@@ -21,10 +21,19 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -35,8 +44,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // Use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
+    private Button detectButton;
     private TextView statusMessage;
     private TextView textValue;
+    public static ArrayList<Ingredient> ingredientDatabase;
 
     private static final int RC_OCR_CAPTURE = 9003;
     private static final String TAG = "MainActivity";
@@ -51,8 +62,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
+        detectButton = (Button) findViewById(R.id.read_text);
 
         findViewById(R.id.read_text).setOnClickListener(this);
+
+        getIngredientsFromDatabase();
     }
 
     /**
@@ -72,6 +86,49 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private boolean finished = false;
+    private boolean reached = false;
+    private ArrayList<String> getIngredientsFromDatabase() {
+        DatabaseReference fbDbRef = FirebaseDatabase.getInstance().getReference("0");
+        final ArrayList<Ingredient> ingredientList = new ArrayList<>();
+
+        fbDbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                reached = true;
+                Iterator iter = snapshot.getChildren().iterator();
+                while (iter.hasNext()) {
+                    DataSnapshot snap = (DataSnapshot) iter.next();
+                    String name = snap.getKey();
+                    String type = snap.getValue().toString();
+                    ingredientList.add(new Ingredient(name, type));
+                }
+
+                setIngredientList(ingredientList);
+                finished = true;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+                return;
+            }
+        });
+
+//        while (!finished) {
+//            // You must give this loop something to do otherwise running it out of debug mode will just cause it to hang
+//            // for some unknown reason...
+//            System.out.println("loading...");
+//        }
+
+        return null;
+    }
+
+    private void setIngredientList(ArrayList<Ingredient> ingredList) {
+        ingredientDatabase = ingredList;
+        detectButton.setText(R.string.read_text);
+        detectButton.setEnabled(true);
+    }
     /**
      * Called when an activity you launched exits, giving you the requestCode
      * you started it with, the resultCode it returned, and any additional

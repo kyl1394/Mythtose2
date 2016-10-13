@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "80549477662",
+    "firebase_url": "https://mythtose-b74fd.firebaseio.com",
+    "project_id": "mythtose-b74fd",
+    "storage_bucket": "mythtose-b74fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80549477662:android:074610b6fa86b978",
+        "android_client_info": {
+          "package_name": "com.google.android.gms.samples.vision.ocrreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "80549477662-27ghui2ms3d0sd34qm06b8qo0drmr1a6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.android.gms.samples.vision.ocrreader",
+            "certificate_hash": "CB6E4673D2367CF5C996FBDB1C0B538B3E22B2A6"
+          }
+        },
+        {
+          "client_id": "80549477662-du4u7iin17131ftjsehbf37tne2s9s1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGIJUARUjohRG1ADKllMUdPNqIHJXtY3E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "80549477662-du4u7iin17131ftjsehbf37tne2s9s1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
