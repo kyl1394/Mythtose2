@@ -14,7 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -85,7 +88,9 @@ public class PopupFragment extends Fragment {
         list.setAdapter(adapter);
     }
 
-    public void update(ArrayList<String> newList) {
+    public void update(ArrayList<String> newList, String categoryName) {
+        TextView textView = (TextView) getView().findViewById(R.id.title_text_view);
+        textView.setText(categoryName + " - Tap for more info");
         links.clear();
         links.addAll(newList);
         Log.d("New List size", ""+newList.size());

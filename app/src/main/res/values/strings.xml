@@ -104,5 +104,5 @@
     </string>
     <string name="add_values">Your Food is</string>
     <string name="new_series">New Series</string>
-    <string name="popupTitleText">Parts of this Group</string>
+        <string name="popupTitleText">Ingredients - Tap for more info</string>
 </resources>

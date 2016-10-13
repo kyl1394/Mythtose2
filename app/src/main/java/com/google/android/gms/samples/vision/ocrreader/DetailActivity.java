@@ -119,7 +119,7 @@ public class DetailActivity extends AppCompatActivity  {
                         //Update Fragment
                         PopupFragment frag = (PopupFragment) getFragmentManager().findFragmentById(R.id.mainActivityFragment);
 
-                        frag.update(chartInfo.get(seriesSelection.getPointIndex()).links);
+                        frag.update(chartInfo.get(seriesSelection.getPointIndex()).links, chartInfo.get(seriesSelection.getPointIndex()).name);
                     }
                 }
             });
